@@ -1,6 +1,7 @@
 package com.thoughtworks.ControlPacage;
 
 
+import com.thoughtworks.ModlePacage.BookImfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
 import com.thoughtworks.ModlePacage.Greeting;
-
-
-
+import org.springframework.web.client.RestTemplate;
 
 
 @RestController
@@ -33,30 +32,13 @@ public class GreetingController {
                 String.format(template, name));
     }
 
-    @RequestMapping("/tony")
-    public ResponseEntity tony(){
-        sql = "select *from User";//SQL语句
-        db1 = new DBConnection(sql);//创建DBHelper对象
-        String result = null;
-        try {
-            ret = db1.pst.executeQuery();//执行语句，得到结果集
-            while (ret.next()) {
-                String uid = ret.getString(1);
-                String ufname = ret.getString(2);
-                String ulname = ret.getString(3);
-                String udate = ret.getString(4);
-                result = uid + ufname + ulname +udate;
-                System.out.println(uid + "\t" + ufname + "\t" + ulname + "\t" + udate );
-            }//显示数据
-            ret.close();
-            db1.close();//关闭连接
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        String str = "{\"data\":"+"\""+result+"\"}";
-        String o = new String(str);
-        ResponseEntity  responseEntity = new ResponseEntity<String>(o, HttpStatus.OK);
-        System.out.println(o);
+    @RequestMapping("/book")
+    public ResponseEntity book(){
+
+        RestTemplate restTemplate = new RestTemplate();
+        String bookImfo = restTemplate.getForObject("http://localhost:8080/trans",String.class);
+        System.out.print(bookImfo.toString());
+        ResponseEntity responseEntity = new ResponseEntity<>(bookImfo,HttpStatus.OK);
         return responseEntity;
     }
 
