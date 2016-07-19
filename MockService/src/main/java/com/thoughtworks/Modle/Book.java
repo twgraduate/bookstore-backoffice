@@ -1,7 +1,6 @@
 package com.thoughtworks.Modle;
 
-public class BookImfo {
-
+public class Book {
     public int id;
     public String name;
     public String isbn;
@@ -15,7 +14,7 @@ public class BookImfo {
         return super.toString();
     }
 
-    public BookImfo(int id, String name, String isbn, String author, double price, String imgUrl, String description) {
+    public Book(int id, String name, String isbn, String author, double price, String imgUrl, String description) {
         this.id = id;
         this.name = name;
         this.isbn = isbn;
@@ -24,5 +23,4 @@ public class BookImfo {
         this.imgUrl = imgUrl;
         this.description = description;
     }
-
 }
