@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<url_config>
-    <url>
-        <id>1</id>
-        <value>http://localhost:8080/MockService/trans</value>
-        <description>Mock the service of bookstore</description>
-    </url>
-</url_config>
