@@ -23,4 +23,17 @@ public class Book {
         this.imgUrl = imgUrl;
         this.description = description;
     }
+
+    public static String objToJson(Book bi){
+        String str="[{";
+        str+="\"id\":\""+bi.id+"\",";
+        str+="\"name\":\""+bi.name+"\",";
+        str+="\"isbn\":\""+bi.isbn+"\",";
+        str+="\"author\":\""+bi.author+"\",";
+        str+="\"price\":\""+bi.price+"\",";
+        str+="\"imgUrl\":\""+bi.imgUrl+"\",";
+        str+="\"description\":\""+bi.description+"\"";
+        str+="}]";
+        return str;
+    }
 }
