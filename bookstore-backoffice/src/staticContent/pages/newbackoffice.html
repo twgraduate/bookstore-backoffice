@@ -12,11 +12,11 @@
 <body  ng-controller="MyCtrl">
     <div style="float:left">
         <ul>
-            <li ng-click="toggle()"><a href="#">{{bookName}}</a></li>
+            <li ng-click="handleShowList()"><a href="#">{{bookName}}</a></li>
         </ul>
     </div>
 
-    <div style="float:right" class="gridStyle" ng-grid="gridOptions">
+    <div ng-if="showList"  style="float:right" class="gridStyle" ng-grid="gridOptions">
     </div>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <url_config>
     <url>
         <id>1</id>
-        <value>http://localhost:8080/MockService/trans</value>
+        <value>http://localhost:8080/MockService/books</value>
         <description>Mock the service of bookstore</description>
     </url>
 </url_config>

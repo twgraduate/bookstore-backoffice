@@ -18,13 +18,11 @@ public class TransImformation {
         ResponseEntity responseEntity = null;
         if(request.getMethod().equals("GET")){
             if(request.getParameter("isbn")!=null){
-                Book bookImfo = new Book(2,"GET某条数据","ahskjakjs","tony",98.8,"url","一本好书");
-                responseEntity = new ResponseEntity(new String(Book.objToJson(bookImfo)), HttpStatus.OK);
+                responseEntity = new ResponseEntity(new String(Book.dataPro(1)), HttpStatus.OK);
                 return responseEntity;
             }
             else {
-                Book bookImfo = new Book(1,"GET所有信息","2032343","托马斯",98.8,"url","一本好书");
-                responseEntity = new ResponseEntity(new String(Book.objToJson(bookImfo)), HttpStatus.OK);
+                responseEntity = new ResponseEntity(new String(Book.dataPro(3)), HttpStatus.OK);
                 return responseEntity;
             }
 
