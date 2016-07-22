@@ -1,6 +1,5 @@
 package com.thoughtworks.Modle;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -27,10 +26,6 @@ public class Book {
         this.price = price;
         this.imgUrl = imgUrl;
         this.description = description;
-    }
-
-    public Book(){
-
     }
 
 
