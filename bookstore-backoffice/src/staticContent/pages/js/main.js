@@ -5,11 +5,7 @@ app.controller('MyCtrl', function($scope , $http) {
     }).error(function () {
         alert("response err");
     });
-
-
     $scope.showList =false;
-
-    
     $scope.showAll = function () {
         $scope.showList = true;
     }

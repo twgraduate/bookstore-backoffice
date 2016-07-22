@@ -31,11 +31,6 @@ public class GreetingController {
     static ResultSet ret = null;
 
 
-    @RequestMapping(value = "/greeting")
-    public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
-        return new Greeting(counter.incrementAndGet(),
-                String.format(template, name));
-    }
 
     @RequestMapping("/book")
     public ResponseEntity book() throws IOException, SAXException, ParserConfigurationException {
