@@ -17,14 +17,14 @@ public class TransImformation {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Book> get(){
         ResponseEntity responseEntity = null;
-        responseEntity = new ResponseEntity(new String(Book.dataPro(3)), HttpStatus.OK);
+        responseEntity = new ResponseEntity(new String(Book.ReadFile()), HttpStatus.OK);
         return responseEntity;
     }
 
     @RequestMapping(method = RequestMethod.GET,value = "/{isbn}")
     public  ResponseEntity<Book> getForISBN(@PathVariable String isbn){
         ResponseEntity responseEntity = null;
-        responseEntity = new ResponseEntity(new String(Book.dataPro(1)), HttpStatus.OK);
+        responseEntity = new ResponseEntity(new String(Book.query()), HttpStatus.OK);
         return responseEntity;
     }
 

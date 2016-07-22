@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Rails之道",
+    "isbn": "4727011",
+    "author": "(美)Obie Fernandez",
+    "price": 89,
+    "img_url": "https://img3.doubanio.com/mpic/s4282672.jpg"
+  },
+  {
+    "name": "Programming Ruby中文版",
+    "isbn": "2032343",
+    "author": "托马斯",
+    "price": 99,
+    "img_url": "https://img3.doubanio.com/mpic/s2370875.jpg"
+  }
+]
