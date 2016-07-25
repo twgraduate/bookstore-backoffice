@@ -67,10 +67,6 @@ app.controller('MyCtrl', function($scope , $http) {
             field: 'price',
             displayName: 'Price',
             cellClass: 'grid-align'
-        },{
-            field: 'imgUrl',
-            displayName: 'ImgUrl',
-            cellClass: 'grid-align'
         }],
         enablePaging: true,
         showFooter: true,
