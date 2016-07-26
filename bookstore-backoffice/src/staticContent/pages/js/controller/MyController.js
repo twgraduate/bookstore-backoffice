@@ -4,19 +4,27 @@ app.controller('MyCtrl', function($scope ,$http,getalldata) {
     $scope.editCondition = '';
 
     $scope.selectedRows=[];
+    
 
     $scope.showAll = function () {
         $scope.showList = true;
     };
 
-    $scope.editCurrentRow = function () {
-     //   $scope.editCondition ='row.rowIndex ==5';
-     //    alert($scope..rowIndex ==5);
-    };
+
+
 
     getalldata.async().then(function (d) {
         $scope.myData = d;
     });
+
+    $scope.editCurrentRow = function () {
+        console.log($scope.selectedRows[0].isbn);
+        angular.forEach($scope.myData, function(data, index){
+            if(data.isbn == $scope.selectedRows[0].isbn){
+                $scope.num = index;
+            }
+        });
+    };
 
     $scope.filterOptions = {
         filterText : "",
@@ -93,19 +101,20 @@ app.controller('MyCtrl', function($scope ,$http,getalldata) {
             field: 'options',
             displayName: 'Options',
             cellClass: 'grid-align',
-            cellTemplate : '<button ng-click="editCurrentRow()">edit</button><span></span><button>del</button>',
+            cellTemplate : '<button  ng-click="editCurrentRow()">edit</button><span></span><button>del</button>',
+            enableCellEdit:false
         }],
         multiSelect : false,
         enableCellSelection: false,
         enableRowSelection: true,
-        enableCellEdit : false,
         enableCellEditOnFocus: true,
-   //     cellEditableCondition : $scope.rowIndex ,
+        selectedItems: $scope.selectedRows,
+        cellEditableCondition : 'row.rowIndex == '+'num',
         enablePaging: true,
         showFooter: true,
         totalServerItems: 'totalServerItems',
         pagingOptions: $scope.pagingOptions,
-        filterOptions: $scope.filterOptions,
+        filterOptions: $scope.filterOptions
     };
 
 });
