@@ -55,7 +55,9 @@ app.controller('MyCtrl', function($scope ,$http,getalldata ) {
 
         }
         else{
-            console.log($scope.originRows.name);
+            angular.copy($scope.originRows[0],$scope.myData[$scope.num]) ;
+            $scope.btnEdit = "edit";
+            $scope.btnDelete = "delete";
         }
     };
 
@@ -65,7 +67,7 @@ app.controller('MyCtrl', function($scope ,$http,getalldata ) {
             $scope.btnEdit = "save";
             $scope.btnDelete = "cancel";
             $scope.gridOptions.selectRow($scope.num,true);
-            console.log($scope.selectedRows);
+            angular.copy($scope.selectedRows,$scope.originRows) ;
         }
         else {
             //发送put消息
@@ -78,6 +80,9 @@ app.controller('MyCtrl', function($scope ,$http,getalldata ) {
                          'description': $scope.selectedRows[0].description
                 },
             }).success(function(response) {$scope.putReturn = response.data;})
+
+            $scope.btnEdit = "edit";
+            $scope.btnDelete = "delete";
         }
 
     };
