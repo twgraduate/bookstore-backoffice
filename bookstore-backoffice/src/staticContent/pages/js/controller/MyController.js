@@ -1,10 +1,20 @@
-app.controller('MyCtrl', function($scope ,$http,getalldata) {
+app.controller('MyCtrl', function($scope ,$http,getalldata ) {
     $scope.showList =false;
 
     $scope.editCondition = '';
 
     $scope.selectedRows=[];
+    $scope.originRows=[];
+
+    $scope.checkedRows=[];
     
+    $scope.editable = false;
+
+    $scope.currentRow = [];
+
+    $scope.btnEdit = "edit";
+    $scope.btnDelete = "delete";
+
 
     $scope.showAll = function () {
         $scope.showList = true;
@@ -12,18 +22,64 @@ app.controller('MyCtrl', function($scope ,$http,getalldata) {
 
 
 
-
     getalldata.async().then(function (d) {
         $scope.myData = d;
     });
 
+
+    $scope.returnCurrentRow = function (row) {
+        if( $scope.checkedRows.indexOf(row)>=0){
+            var pos = $scope.checkedRows.indexOf(row);
+            $scope.checkedRows.splice(pos,1);
+        }
+        else {
+            $scope.editable = true;
+            $scope.checkedRows.push(row);
+        }
+        if($scope.checkedRows.length!=1){
+            $scope.row = 11;
+            $scope.btnEdit = "edit";
+            $scope.btnDelete = "delete";
+            $scope.editable = false;
+            $scope.editCurrentRow();
+        }
+        else
+        {
+            $scope.editable = true;
+            $scope.row = $scope.checkedRows[0];
+        }
+    };
+
+    $scope.delCurrentRow = function () {
+        if($scope.btnDelete=="delete"){
+
+        }
+        else{
+            console.log($scope.originRows.name);
+        }
+    };
+
     $scope.editCurrentRow = function () {
-        console.log($scope.selectedRows[0].isbn);
-        angular.forEach($scope.myData, function(data, index){
-            if(data.isbn == $scope.selectedRows[0].isbn){
-                $scope.num = index;
-            }
-        });
+        if($scope.btnEdit=="edit"&&$scope.row<10){
+            $scope.num = $scope.row;
+            $scope.btnEdit = "save";
+            $scope.btnDelete = "cancel";
+            $scope.gridOptions.selectRow($scope.num,true);
+            console.log($scope.selectedRows);
+        }
+        else {
+            //发送put消息
+            $http({
+                method: 'PUT',
+                url: 'http://localhost:8080/bookstore-backoffice/book/'+$scope.selectedRows[0].isbn,
+                data: {
+                         'price': $scope.selectedRows[0].price,
+                         'img_url': $scope.selectedRows[0].img_url,
+                         'description': $scope.selectedRows[0].description
+                },
+            }).success(function(response) {$scope.putReturn = response.data;})
+        }
+
     };
 
     $scope.filterOptions = {
@@ -72,6 +128,7 @@ app.controller('MyCtrl', function($scope ,$http,getalldata) {
         }
     },true);
 
+
     $scope.gridOptions = {
         data : 'myData',
         width : '100%',
@@ -98,10 +155,14 @@ app.controller('MyCtrl', function($scope ,$http,getalldata) {
             displayName: 'ImgUrl',
             cellClass: 'grid-align'
         },{
-            field: 'options',
-            displayName: 'Options',
+            field: 'description',
+            displayName: 'Description',
+            cellClass: 'grid-align'
+        },{
+            field: 'options1',
+            displayName: 'Check',
             cellClass: 'grid-align',
-            cellTemplate : '<button  ng-click="editCurrentRow()">edit</button><span></span><button>del</button>',
+            cellTemplate : '<input type="checkbox" ng-model="check" ng-click="returnCurrentRow(row.rowIndex)">',
             enableCellEdit:false
         }],
         multiSelect : false,

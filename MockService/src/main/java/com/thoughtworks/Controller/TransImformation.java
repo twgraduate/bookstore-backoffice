@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.websocket.server.PathParam;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Enumeration;
 
 @RestController
 @RequestMapping("/books")
@@ -36,7 +40,8 @@ public class TransImformation {
     }
 
     @RequestMapping(method = RequestMethod.PUT , value = "/{isbn}")
-    public ResponseEntity<Book> edit(@PathVariable String isbn){
+    public ResponseEntity<Book> edit(@PathVariable String isbn,@RequestBody String body) throws IOException {
+        String result = body;
         ResponseEntity responseEntity = null;
         responseEntity = new ResponseEntity(new String("success"), HttpStatus.OK);
         return responseEntity;

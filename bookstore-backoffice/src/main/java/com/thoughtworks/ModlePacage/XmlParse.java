@@ -14,7 +14,7 @@ public class XmlParse {
 
     public String url;
 
-    public String ParseXml(String addr) throws ParserConfigurationException, IOException, SAXException {
+    public String ParseXml(String addr,String isbn) throws ParserConfigurationException, IOException, SAXException {
         String strXml = null;
         File f = new File(addr);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -26,15 +26,20 @@ public class XmlParse {
                 strXml = doc.getElementsByTagName("value").item(i).getFirstChild().getNodeValue();
             }
         }
-        return strXml;
+        if(isbn==""){
+            return strXml;
+        }
+        else {
+            return strXml+"/"+isbn;
+        }
     }
 
-    public String pathParse() throws IOException, SAXException, ParserConfigurationException {
+    public String pathParse(String isbn) throws IOException, SAXException, ParserConfigurationException {
         String str = XmlParse.class.getResource("../../").getPath();
         int pos = str.indexOf("classes");
         str = str.substring(0,pos);
         str += "resources/config.xml";
-        url = this.ParseXml(str);
+        url = this.ParseXml(str,isbn);
         return url;
     }
 }
