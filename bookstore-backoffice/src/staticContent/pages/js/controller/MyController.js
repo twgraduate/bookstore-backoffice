@@ -1,13 +1,13 @@
-app.controller('MyCtrl', function($scope ,$http,getalldata ) {
-    $scope.showList =false;
+app.controller('MyCtrl', function ($scope, $http, getalldata) {
+    $scope.showList = false;
 
     $scope.editCondition = '';
 
-    $scope.selectedRows=[];
-    $scope.originRows=[];
+    $scope.selectedRows = [];
+    $scope.originRows = [];
 
-    $scope.checkedRows=[];
-    
+    $scope.checkedRows = [];
+
     $scope.editable = false;
 
     $scope.currentRow = [];
@@ -21,65 +21,83 @@ app.controller('MyCtrl', function($scope ,$http,getalldata ) {
     };
 
 
-
     getalldata.async().then(function (d) {
         $scope.myData = d;
     });
 
 
     $scope.returnCurrentRow = function (row) {
-        if( $scope.checkedRows.indexOf(row)>=0){
+        if ($scope.checkedRows.indexOf(row) >= 0) {
             var pos = $scope.checkedRows.indexOf(row);
-            $scope.checkedRows.splice(pos,1);
+            $scope.checkedRows.splice(pos, 1);
         }
         else {
             $scope.editable = true;
             $scope.checkedRows.push(row);
         }
-        if($scope.checkedRows.length!=1){
+        if ($scope.checkedRows.length != 1) {
             $scope.row = 11;
             $scope.btnEdit = "edit";
             $scope.btnDelete = "delete";
             $scope.editable = false;
             $scope.editCurrentRow();
         }
-        else
-        {
+        else {
             $scope.editable = true;
             $scope.row = $scope.checkedRows[0];
         }
     };
 
     $scope.delCurrentRow = function () {
-        if($scope.btnDelete=="delete"){
+        if ($scope.btnDelete == "delete") {
+            $scope.isbnArray = [];
+            for (var k = 0; k < $scope.checkedRows.length; k++) {
+                $scope.isbnArray.push($scope.myData[$scope.checkedRows[k]].isbn);
+            }
 
+            $scope.isbnJson='{';
+            for (var i in $scope.isbnArray){
+                $scope.isbnJson = $scope.isbnJson + "'isbn" + i + "':'" + $scope.isbnArray[i] + "',";
+            }
+            $scope.isbnJson = $scope.isbnJson.substr(0,$scope.isbnJson.length-1);
+            $scope.isbnJson += '}';
+            //发送delete消息
+            $http({
+                method : 'DELETE',
+                url:"http://localhost:8080/bookstore-backoffice/book",
+                data : $scope.isbnJson
+            }).success(function (response) {
+                
+            })
         }
-        else{
-            angular.copy($scope.originRows[0],$scope.myData[$scope.num]) ;
-            $scope.btnEdit = "edit";
-            $scope.btnDelete = "delete";
+        else {
+            angular.copy($scope.originRows[0], $scope.myData[$scope.num]),
+            $scope.btnEdit = "edit",
+            $scope.btnDelete = "delete"
         }
     };
 
     $scope.editCurrentRow = function () {
-        if($scope.btnEdit=="edit"&&$scope.row<10){
+        if ($scope.btnEdit == "edit" && $scope.row < 10) {
             $scope.num = $scope.row;
             $scope.btnEdit = "save";
             $scope.btnDelete = "cancel";
-            $scope.gridOptions.selectRow($scope.num,true);
-            angular.copy($scope.selectedRows,$scope.originRows) ;
+            $scope.gridOptions.selectRow($scope.num, true);
+            angular.copy($scope.selectedRows, $scope.originRows);
         }
         else {
             //发送put消息
             $http({
                 method: 'PUT',
-                url: 'http://localhost:8080/bookstore-backoffice/book/'+$scope.selectedRows[0].isbn,
+                url: 'http://localhost:8080/bookstore-backoffice/book/' + $scope.selectedRows[0].isbn,
                 data: {
-                         'price': $scope.selectedRows[0].price,
-                         'img_url': $scope.selectedRows[0].img_url,
-                         'description': $scope.selectedRows[0].description
-                },
-            }).success(function(response) {$scope.putReturn = response.data;})
+                    'price': $scope.myData[$scope.num].price,
+                    'img_url': $scope.myData[$scope.num].img_url,
+                    'description': $scope.myData[$scope.num].description
+                }
+            }).success(function (response) {
+                $scope.putReturn = response.data;
+            })
 
             $scope.btnEdit = "edit";
             $scope.btnDelete = "delete";
@@ -88,17 +106,17 @@ app.controller('MyCtrl', function($scope ,$http,getalldata ) {
     };
 
     $scope.filterOptions = {
-        filterText : "",
-        useExternalFilter : "true"
+        filterText: "",
+        useExternalFilter: "true"
     };
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
-        pageSizes : [10,15,20],
-        pageSize : 10,
-        currentPage : 1
+        pageSizes: [10],
+        pageSize: 10,
+        currentPage: 1
     };
-    $scope.setPagingData = function (data , page , pageSize) {
-        var pageData = data.slice((page-1)*pageSize,page*pageSize);
+    $scope.setPagingData = function (data, page, pageSize) {
+        var pageData = data.slice((page - 1) * pageSize, page * pageSize);
         $scope.myData = pageData;
         $scope.totalServerItems = data.length;
         if (!$scope.$$phase) {
@@ -106,76 +124,76 @@ app.controller('MyCtrl', function($scope ,$http,getalldata ) {
         }
     };
 
-    $scope.getPagedDataAsync = function (pageSize , page , searchText) {
+    $scope.getPagedDataAsync = function (pageSize, page, searchText) {
         setTimeout(function () {
             var data;
-            if(searchText){
+            if (searchText) {
                 var ft = searchText.toLowerCase();
                 $http.get('http://localhost:8080/bookstore-backoffice/book').success(function (largeLoad) {
                     data = largeLoad.filter(function (item) {
                         return JSON.stringify(item).toLowerCase().indexOf(ft) != -1;
                     });
-                    $scope.setPagingData(data , page , pageSize);
+                    $scope.setPagingData(data, page, pageSize);
                 });
-            }else {
+            } else {
                 $http.get('http://localhost:8080/bookstore-backoffice/book').success(function (largeLoad) {
-                    $scope.setPagingData(largeLoad , page , pageSize);
+                    $scope.setPagingData(largeLoad, page, pageSize);
                 });
             }
-        },100);
+        }, 100);
     };
 
-    $scope.getPagedDataAsync($scope.pagingOptions.pageSize,$scope.pagingOptions.currentPage);
+    $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
 
-    $scope.$watch('pagingOptions',function (newVal,oldVal) {
-        if(newVal !== oldVal && newVal.currentPage !== oldVal.currentPage){
+    $scope.$watch('pagingOptions', function (newVal, oldVal) {
+        if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
             $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
         }
-    },true);
+    }, true);
 
 
     $scope.gridOptions = {
-        data : 'myData',
-        width : '100%',
-        sortable : true,
-        resizeable :true,
-        columnDefs : [{
+        data: 'myData',
+        width: '100%',
+        sortable: true,
+        resizeable: true,
+        columnDefs: [{
             field: 'name',
             displayName: 'Name',
             cellClass: 'grid-align',
-        },{
+        }, {
             field: 'isbn',
             displayName: 'ISBN',
             cellClass: 'grid-align'
-        },{
+        }, {
             field: 'author',
             displayName: 'Author',
             cellClass: 'grid-align'
-        },{
+        }, {
             field: 'price',
             displayName: 'Price',
             cellClass: 'grid-align'
-        },{
+        }, {
             field: 'img_url',
             displayName: 'ImgUrl',
             cellClass: 'grid-align'
-        },{
+        }, {
             field: 'description',
             displayName: 'Description',
             cellClass: 'grid-align'
-        },{
+        }, {
             field: 'options1',
             displayName: 'Check',
             cellClass: 'grid-align',
-            cellTemplate : '<input type="checkbox" ng-model="check" ng-click="returnCurrentRow(row.rowIndex)">',
-            enableCellEdit:false
+            cellTemplate: '<input type="checkbox" ng-model="check" ng-click="returnCurrentRow(row.rowIndex)">',
+            enableCellEdit: false
         }],
-        multiSelect : false,
+        multiSelect: false,
         enableCellSelection: false,
         enableRowSelection: true,
         enableCellEditOnFocus: true,
         selectedItems: $scope.selectedRows,
-        cellEditableCondition : 'row.rowIndex == '+'num',
+        cellEditableCondition: 'row.rowIndex == ' + 'num',
         enablePaging: true,
         showFooter: true,
         totalServerItems: 'totalServerItems',

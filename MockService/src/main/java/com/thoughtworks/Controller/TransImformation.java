@@ -1,19 +1,12 @@
-package com.thoughtworks.Controller;
+package com.thoughtworks.controller;
 
 
-import com.thoughtworks.Modle.Book;
+import com.thoughtworks.model.Book;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.websocket.server.PathParam;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Enumeration;
 
 @RestController
 @RequestMapping("/books")
@@ -41,17 +34,17 @@ public class TransImformation {
 
     @RequestMapping(method = RequestMethod.PUT , value = "/{isbn}")
     public ResponseEntity<Book> edit(@PathVariable String isbn,@RequestBody String body) throws IOException {
-        String result = body;
         ResponseEntity responseEntity = null;
         responseEntity = new ResponseEntity(new String("success"), HttpStatus.OK);
         return responseEntity;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE , value = "{/isbn}")
-    public ResponseEntity<Book> delete(@PathVariable String isbn){
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseEntity<Book> delete(@RequestBody String isbnArray){
         ResponseEntity responseEntity = null;
-        responseEntity = new ResponseEntity(new String("success"), HttpStatus.OK);
+        responseEntity = new ResponseEntity(new String(isbnArray), HttpStatus.OK);
         return responseEntity;
     }
 
 }
+

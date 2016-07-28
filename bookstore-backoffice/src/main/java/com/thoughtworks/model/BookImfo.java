@@ -1,4 +1,4 @@
-package com.thoughtworks.ModlePacage;
+package com.thoughtworks.model;
 
 public class BookImfo {
     private int id;

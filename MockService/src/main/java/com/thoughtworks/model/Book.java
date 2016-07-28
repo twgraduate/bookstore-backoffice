@@ -1,4 +1,4 @@
-package com.thoughtworks.Modle;
+package com.thoughtworks.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
