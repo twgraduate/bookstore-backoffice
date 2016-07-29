@@ -1,5 +1,6 @@
 package com.thoughtworks.model;
 
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -9,11 +10,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-
+@Component
 public class XmlParse {
 
     public String url;
-
     public String ParseXml(String addr, String isbn) throws ParserConfigurationException, IOException, SAXException {
         String strXml = null;
         File f = new File(addr);

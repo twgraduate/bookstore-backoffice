@@ -29,6 +29,7 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.39'
     compile group: 'org.json', name: 'json', version: '20160212'
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 }
 
 task wrapper(type: Wrapper) {

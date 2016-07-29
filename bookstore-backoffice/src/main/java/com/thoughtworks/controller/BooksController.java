@@ -1,8 +1,7 @@
 package com.thoughtworks.controller;
 
 import com.thoughtworks.model.XmlParse;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
+import com.thoughtworks.services.BooksService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,28 +14,27 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/book")
-public class RequestDispatch {
+public class BooksController {
 
     RestTemplate restTemplate = new RestTemplate();
     XmlParse xmlParse = new XmlParse();
+    BooksService booksService = new BooksService();
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity book() throws IOException, SAXException, ParserConfigurationException {
-        String bookImfo = restTemplate.getForObject(xmlParse.pathParse(""), String.class);
-        ResponseEntity responseEntity = new ResponseEntity<>(bookImfo, HttpStatus.OK);
+        ResponseEntity responseEntity = booksService.getBooks();
         return responseEntity;
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{isbn}")
     public ResponseEntity edit(@PathVariable String isbn, @RequestBody String body) throws IOException, SAXException, ParserConfigurationException {
-        restTemplate.put(xmlParse.pathParse(isbn), new String(body));
+        ResponseEntity responseEntity = booksService.edit(isbn,body);
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     public ResponseEntity delete(@RequestBody String isbnArray) throws IOException, SAXException, ParserConfigurationException {
-        HttpEntity<?> request = new HttpEntity<Object>(isbnArray);
-        ResponseEntity responseEntity = restTemplate.exchange(xmlParse.pathParse(""), HttpMethod.DELETE, request, String.class);
+        ResponseEntity responseEntity = booksService.delete(isbnArray);
         return responseEntity;
     }
 }
