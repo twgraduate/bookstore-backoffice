@@ -10,10 +10,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+
 @Component
 public class XmlParse {
 
     public String url;
+
     public String ParseXml(String addr, String isbn) throws ParserConfigurationException, IOException, SAXException {
         String strXml = null;
         File f = new File(addr);
