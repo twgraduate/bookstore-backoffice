@@ -27,13 +27,13 @@ public class BooksServiceTest {
         booksService.xmlParse = xmlParseMockedService;
         booksService.restTemplate = restTemplateMockedService;
         when(xmlParseMockedService.pathParse("")).thenReturn("mock service address");
-        when(restTemplateMockedService.getForEntity("mock service address", String.class)).thenReturn(new ResponseEntity("'msg':'error message'", INTERNAL_SERVER_ERROR));
+        when(restTemplateMockedService.getForEntity("mock service address", String.class)).thenReturn(new ResponseEntity("{\"msg\": \"error message\"}", INTERNAL_SERVER_ERROR));
 
         //when
         ResponseEntity responseEntity = booksService.getBooks();
 
         //then
-        assertEquals(new ResponseEntity("'msg':'error message'", INTERNAL_SERVER_ERROR), responseEntity);
+        assertEquals(new ResponseEntity("{\"msg\": \"error message\"}", INTERNAL_SERVER_ERROR), responseEntity);
     }
 
     @Test
@@ -44,13 +44,13 @@ public class BooksServiceTest {
         booksService.xmlParse = xmlParseMockedService;
         booksService.restTemplate = restTemplateMockedService;
         when(xmlParseMockedService.pathParse("")).thenReturn("mock service address");
-        when(restTemplateMockedService.getForEntity("mock service address", String.class)).thenReturn(new ResponseEntity("'msg':'success'", HttpStatus.OK));
+        when(restTemplateMockedService.getForEntity("mock service address", String.class)).thenReturn(new ResponseEntity("{\"msg\": \"success\"}", HttpStatus.OK));
 
         //when
         ResponseEntity responseEntity = booksService.getBooks();
 
         //then
-        assertEquals(new ResponseEntity("'msg':'success'", HttpStatus.OK), responseEntity);
+        assertEquals(new ResponseEntity("{\"msg\": \"success\"}", HttpStatus.OK), responseEntity);
     }
 
     @Test
@@ -62,13 +62,13 @@ public class BooksServiceTest {
         booksService.xmlParse = xmlParseMockedService;
         booksService.restTemplate = restTemplateMockedService;
         when(xmlParseMockedService.pathParse("isbn")).thenReturn("mock service address");
-        when(restTemplateMockedService.exchange("mock service address", HttpMethod.PUT, request, String.class)).thenReturn(new ResponseEntity<>("'msg': 'Book updated'", HttpStatus.ACCEPTED));
+        when(restTemplateMockedService.exchange("mock service address", HttpMethod.PUT, request, String.class)).thenReturn(new ResponseEntity<>("{\"msg\": \"book update\"}", HttpStatus.ACCEPTED));
 
         //when
         ResponseEntity responseEntity = booksService.edit("isbn", "body");
 
         //then
-        assertEquals(new ResponseEntity("'msg': 'Book updated'", HttpStatus.ACCEPTED), responseEntity);
+        assertEquals(new ResponseEntity("{\"msg\": \"book update\"}", HttpStatus.ACCEPTED), responseEntity);
     }
 
     @Test
@@ -80,13 +80,13 @@ public class BooksServiceTest {
         booksService.xmlParse = xmlParseMockedService;
         booksService.restTemplate = restTemplateMockedService;
         when(xmlParseMockedService.pathParse("isbn")).thenReturn("mock service address");
-        when(restTemplateMockedService.exchange(xmlParseMockedService.pathParse("isbn"), HttpMethod.PUT, request, String.class)).thenReturn(new ResponseEntity<>("'msg': 'username or password is error'", HttpStatus.UNAUTHORIZED));
+        when(restTemplateMockedService.exchange(xmlParseMockedService.pathParse("isbn"), HttpMethod.PUT, request, String.class)).thenReturn(new ResponseEntity<>("{\"msg\": \"username or password is error\"}", HttpStatus.UNAUTHORIZED));
 
         //when
         ResponseEntity responseEntity = booksService.edit("isbn", "body");
 
         //then
-        assertEquals(new ResponseEntity<>("'msg': 'username or password is error'", HttpStatus.UNAUTHORIZED), responseEntity);
+        assertEquals(new ResponseEntity<>("{\"msg\": \"username or password is error\"}", HttpStatus.UNAUTHORIZED), responseEntity);
     }
 
     @Test
@@ -98,13 +98,13 @@ public class BooksServiceTest {
         booksService.xmlParse = xmlParseMockedService;
         booksService.restTemplate = restTemplateMockedService;
         when(xmlParseMockedService.pathParse("isbn")).thenReturn("mock service address");
-        when(restTemplateMockedService.exchange(xmlParseMockedService.pathParse("isbn"), HttpMethod.PUT, request, String.class)).thenReturn(new ResponseEntity<>("'msg': 'error message'", HttpStatus.CONFLICT));
+        when(restTemplateMockedService.exchange(xmlParseMockedService.pathParse("isbn"), HttpMethod.PUT, request, String.class)).thenReturn(new ResponseEntity<>("{\"msg\": \"error message\"}", HttpStatus.CONFLICT));
 
         //when
         ResponseEntity responseEntity = booksService.edit("isbn", "body");
 
         //then
-        assertEquals(new ResponseEntity<>("'msg': 'error message'", HttpStatus.CONFLICT), responseEntity);
+        assertEquals(new ResponseEntity<>("{\"msg\": \"error message\"}", HttpStatus.CONFLICT), responseEntity);
     }
 
     @Test
@@ -116,11 +116,11 @@ public class BooksServiceTest {
         booksService.xmlParse = xmlParseMockedService;
         booksService.restTemplate = restTemplateMockedService;
         when(xmlParseMockedService.pathParse("")).thenReturn("mock service address");
-        when(restTemplateMockedService.exchange(xmlParseMockedService.pathParse(""), HttpMethod.DELETE, request, String.class)).thenReturn(new ResponseEntity<>("'msg': 'Book deleted'", HttpStatus.OK));
+        when(restTemplateMockedService.exchange(xmlParseMockedService.pathParse(""), HttpMethod.DELETE, request, String.class)).thenReturn(new ResponseEntity<>("{\"msg\": \"Book deleted\"}", HttpStatus.OK));
 
         //when
         ResponseEntity responseEntity = booksService.delete("1,2,3");
-        assertEquals(new ResponseEntity<>("'msg': 'Book deleted'", HttpStatus.OK), responseEntity);
+        assertEquals(new ResponseEntity<>("{\"msg\": \"Book deleted\"}", HttpStatus.OK), responseEntity);
 
     }
 
@@ -133,11 +133,11 @@ public class BooksServiceTest {
         booksService.xmlParse = xmlParseMockedService;
         booksService.restTemplate = restTemplateMockedService;
         when(xmlParseMockedService.pathParse("")).thenReturn("mock service address");
-        when(restTemplateMockedService.exchange(xmlParseMockedService.pathParse(""), HttpMethod.DELETE, request, String.class)).thenReturn(new ResponseEntity<>("'msg': 'username or password is error'", HttpStatus.UNAUTHORIZED));
+        when(restTemplateMockedService.exchange(xmlParseMockedService.pathParse(""), HttpMethod.DELETE, request, String.class)).thenReturn(new ResponseEntity<>("{\"msg\": \"username or password is error\"}", HttpStatus.UNAUTHORIZED));
 
         //when
         ResponseEntity responseEntity = booksService.delete("1,2,3");
-        assertEquals(new ResponseEntity<>("'msg': 'username or password is error'", HttpStatus.UNAUTHORIZED), responseEntity);
+        assertEquals(new ResponseEntity<>("{\"msg\": \"username or password is error\"}", HttpStatus.UNAUTHORIZED), responseEntity);
 
     }
 }

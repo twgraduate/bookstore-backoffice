@@ -20,6 +20,9 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
         $scope.showList = true;
     };
 
+    $scope.openAddPage = function () {
+        window.location.href = "http://localhost:63342/code/bookstore-backoffice/src/staticContent/pages/addpage.html?_ijt=umb3pdnstojgpmk4ho57ibqslg";
+    }
 
     getalldata.async().then(function (d) {
         $scope.myData = d;
@@ -55,25 +58,27 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
                 $scope.isbnArray.push($scope.myData[$scope.checkedRows[k]].isbn);
             }
 
-            $scope.isbnJson='{';
-            for (var i in $scope.isbnArray){
+            $scope.isbnJson = '{';
+            for (var i in $scope.isbnArray) {
                 $scope.isbnJson = $scope.isbnJson + "'isbn" + i + "':'" + $scope.isbnArray[i] + "',";
             }
-            $scope.isbnJson = $scope.isbnJson.substr(0,$scope.isbnJson.length-1);
+            $scope.isbnJson = $scope.isbnJson.substr(0, $scope.isbnJson.length - 1);
             $scope.isbnJson += '}';
             //发送delete消息
             $http({
-                method : 'DELETE',
-                url:"http://localhost:8080/bookstore-backoffice/book",
-                data : $scope.isbnJson
+                method: 'DELETE',
+                url: "http://localhost:8080/bookstore-backoffice/book",
+                data: $scope.isbnJson
             }).success(function (response) {
-                
+                for (var k = 0;k< $scope.checkedRows.length;k++){
+                    $scope.myData.splice($scope.checkedRows[k],1);
+                }
             })
         }
         else {
             angular.copy($scope.originRows[0], $scope.myData[$scope.num]),
-            $scope.btnEdit = "edit",
-            $scope.btnDelete = "delete"
+                $scope.btnEdit = "edit",
+                $scope.btnDelete = "delete"
         }
     };
 
@@ -97,7 +102,7 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
                 }
             }).success(function (response) {
                 $scope.putReturn = response.data;
-            })
+            });
 
             $scope.btnEdit = "edit";
             $scope.btnDelete = "delete";

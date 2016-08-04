@@ -1,8 +1,10 @@
 <div class="row">
   <div class="col-sm-3 col-md-2 sidebar">
     <button class="button white" ng-click="showAll()">Show All</button>
-    <button class="button black"  ng-disabled=!editable ng-click="editCurrentRow()">{{btnEdit}}</button>
-    <button  ng-click="delCurrentRow()">{{btnDelete}}</button>
+    <button class="button white"  ng-disabled=!editable ng-click="editCurrentRow()">{{btnEdit}}</button>
+    <button class="button white" ng-click="openAddPage()">Add</button>
+    <button  class="button white" ng-click="delCurrentRow()">{{btnDelete}}</button>
+    
   </div>
   <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <h2 class="sub-header">Book List</h2>

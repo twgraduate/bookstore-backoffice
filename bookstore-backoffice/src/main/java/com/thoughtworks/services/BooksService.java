@@ -1,24 +1,22 @@
 package com.thoughtworks.services;
 
 import com.thoughtworks.model.XmlParse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
-@Service
 public class BooksService {
 
     protected RestTemplate restTemplate = new RestTemplate();
 
     protected XmlParse xmlParse = new XmlParse();
+
 
     public ResponseEntity getBooks() {
         ResponseEntity<String> responseEntity = null;
@@ -29,7 +27,7 @@ public class BooksService {
         }
         HttpStatus status = responseEntity.getStatusCode();
         if (status.is5xxServerError()) {
-            return new ResponseEntity<>("'msg':'error message'", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("{\"msg\": \"error message\"}", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
             return responseEntity;
         }
@@ -44,11 +42,11 @@ public class BooksService {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         if (responseEntity.getStatusCode().value() == 202)
-            return new ResponseEntity<>("'msg': 'Book updated'", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("{\"msg\": \"book update\"}", HttpStatus.ACCEPTED);
         else if (responseEntity.getStatusCode().value() == 401)
-            return new ResponseEntity<>("'msg': 'username or password is error'", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("{\"msg\": \"username or password is error\"}", HttpStatus.UNAUTHORIZED);
         else
-            return new ResponseEntity<>("'msg': 'error message'", HttpStatus.CONFLICT);
+            return new ResponseEntity<>("{\"msg\": \"error message\"}", HttpStatus.CONFLICT);
     }
 
     public ResponseEntity delete(String isbnArray) {
@@ -61,9 +59,9 @@ public class BooksService {
         }
         HttpStatus status = responseEntity.getStatusCode();
         if (status.is4xxClientError()) {
-            return new ResponseEntity("'msg': 'username or password is error'", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity("{\"msg\": \"username or password is error\"}", HttpStatus.UNAUTHORIZED);
         } else {
-            return new ResponseEntity("'msg': 'Book deleted'", HttpStatus.OK);
+            return new ResponseEntity("{\"msg\": \"Book deleted\"}", HttpStatus.OK);
         }
     }
 
