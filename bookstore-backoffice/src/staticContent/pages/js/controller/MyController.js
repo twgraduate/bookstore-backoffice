@@ -72,6 +72,7 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
             }).success(function (response) {
                 for (var k = 0;k< $scope.checkedRows.length;k++){
                     $scope.myData.splice($scope.checkedRows[k],1);
+                    $scope.check.checked = false;
                 }
             })
         }

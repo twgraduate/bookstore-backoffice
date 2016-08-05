@@ -7,7 +7,7 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.thoughtworks.controller","com.thoughtworks.model"})
+//@ComponentScan(basePackages = {"com.thoughtworks.controller","com.thoughtworks.model"})
 public class Application extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

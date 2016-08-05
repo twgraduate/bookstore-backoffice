@@ -2,6 +2,7 @@ package com.thoughtworks.controller;
 
 import com.thoughtworks.model.XmlParse;
 import com.thoughtworks.services.BooksService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,12 @@ import java.io.IOException;
 @RequestMapping("/book")
 public class BooksController {
 
-    RestTemplate restTemplate = new RestTemplate();
-    XmlParse xmlParse = new XmlParse();
-    BooksService booksService = new BooksService();
+    private BooksService booksService;
+
+    @Autowired
+    public BooksController(BooksService booksService) {
+        this.booksService = booksService;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity book() throws IOException, SAXException, ParserConfigurationException {
@@ -28,8 +32,8 @@ public class BooksController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{isbn}")
     public ResponseEntity edit(@PathVariable String isbn, @RequestBody String body) throws IOException, SAXException, ParserConfigurationException {
-        ResponseEntity responseEntity = booksService.edit(isbn,body);
-        return new ResponseEntity<>(body, HttpStatus.OK);
+        ResponseEntity responseEntity = booksService.edit(isbn, body);
+        return responseEntity;
     }
 
     @RequestMapping(method = RequestMethod.DELETE)

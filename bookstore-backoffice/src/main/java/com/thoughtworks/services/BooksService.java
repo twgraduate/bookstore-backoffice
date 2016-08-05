@@ -1,22 +1,32 @@
 package com.thoughtworks.services;
 
 import com.thoughtworks.model.XmlParse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
+@Service
 public class BooksService {
 
     protected RestTemplate restTemplate = new RestTemplate();
 
-    protected XmlParse xmlParse = new XmlParse();
+    @Autowired
+    protected XmlParse xmlParse;
 
+    public BooksService() {
+    }
+
+    public void setXmlParse(XmlParse xmlParse) {
+        this.xmlParse = xmlParse;
+    }
 
     public ResponseEntity getBooks() {
         ResponseEntity<String> responseEntity = null;
@@ -29,7 +39,7 @@ public class BooksService {
         if (status.is5xxServerError()) {
             return new ResponseEntity<>("{\"msg\": \"error message\"}", HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            return responseEntity;
+            return new ResponseEntity<String>(responseEntity.getBody(), HttpStatus.OK);
         }
     }
 
