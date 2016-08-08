@@ -1,32 +1,36 @@
 app.controller('MyCtrl', function ($scope, $http, getalldata) {
-    $scope.showList = false;
-
+    $scope.showList = true;
     $scope.editCondition = '';
-
     $scope.selectedRows = [];
     $scope.originRows = [];
-
     $scope.checkedRows = [];
-
     $scope.editable = false;
-
     $scope.currentRow = [];
-
     $scope.btnEdit = "edit";
     $scope.btnDelete = "delete";
-
+    $scope.allData = '';
+    $scope.firstVisitFlag = true;
 
     $scope.showAll = function () {
         $scope.showList = true;
     };
 
     $scope.openAddPage = function () {
-        window.location.href = "http://localhost:63342/code/bookstore-backoffice/src/staticContent/pages/addpage.html?_ijt=umb3pdnstojgpmk4ho57ibqslg";
+          window.location.href = "http://localhost:63342/code/bookstore-backoffice/src/staticContent/pages/addpage.html?_ijt=umb3pdnstojgpmk4ho57ibqslg";
+          $scope.allData.push(
+              {
+                  "name": "Rails之道",
+                  "isbn": "4727011",
+                  "author": "(美)Obie Fernandez",
+                  "price": 89,
+                  "img_url": "https://img3.doubanio.com/mpic/s4282672.jpg",
+                  "description": "《Rails之道》按照Rails的各个子系统进行组织编排……"
+              }
+          );
+           $scope.setPagingData($scope.allData, $scope.pagingOptions.currentPage, $scope.pagingOptions.pageSize);
+
     }
 
-    getalldata.async().then(function (d) {
-        $scope.myData = d;
-    });
 
 
     $scope.returnCurrentRow = function (row) {
@@ -117,7 +121,7 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
     };
     $scope.totalServerItems = 0;
     $scope.pagingOptions = {
-        pageSizes: [10],
+        pageSizes: [10,20,30],
         pageSize: 10,
         currentPage: 1
     };
@@ -142,20 +146,29 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
                     $scope.setPagingData(data, page, pageSize);
                 });
             } else {
-                $http.get('http://localhost:8080/bookstore-backoffice/book').success(function (largeLoad) {
-                    $scope.setPagingData(largeLoad, page, pageSize);
-                });
+                if($scope.firstVisitFlag){
+                     getalldata.async().then(function (d) {
+                        $scope.allData = d;
+                        $scope.setPagingData(d, page, pageSize);
+                     });
+                }
+                else{
+                    $scope.setPagingData($scope.allData , page, pageSize);
+                }
             }
         }, 100);
     };
 
     $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
 
+
     $scope.$watch('pagingOptions', function (newVal, oldVal) {
         if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+            $scope.firstVisitFlag = false;
             $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
         }
     }, true);
+
 
 
     $scope.gridOptions = {
@@ -196,6 +209,13 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
         }],
         multiSelect: false,
         enableCellSelection: false,
+
+        enablePaging : true,
+        showFooter: true,
+        totalServerItems: 'totalServerItems',
+        pagingOptions: $scope.pagingOptions,
+        filterOptions: $scope.filterOptions,
+
         enableRowSelection: true,
         enableCellEditOnFocus: true,
         selectedItems: $scope.selectedRows,
