@@ -1,0 +1,37 @@
+var addpage = angular.module('addPage',['ngCookies']);
+addpage.controller('AddForm',function($scope, $http,$cookieStore){
+    $scope.name = "";
+    $scope.isbn = "";
+    $scope.author = "";
+    $scope.price = "";
+    $scope.imgurl = "";
+    $scope.description = "";
+
+
+    $scope.addbook = function(){
+        $scope.result = {
+          "name": $scope.name,
+          "isbn": $scope.isbn,
+          "author": $scope.author,
+          "price": $scope.price,
+          "img_url": $scope.imgurl,
+          "description": $scope.description
+        };
+
+        $http({
+            method: 'POST',
+            url: 'http://localhost:8080/bookstore-backoffice/book',
+            data: $scope.result
+        }).success(function (response) {
+            if(response.msg == "Create a new book"){
+                $cookieStore.put("bookMsg",$scope.result);
+                alert(response.msg);
+                window.location.href = "../pages/index.html";
+            }else{
+                alert("Add Fail");
+            }
+
+        });
+    }
+});
+

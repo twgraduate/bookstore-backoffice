@@ -43,6 +43,24 @@ public class BooksService {
         }
     }
 
+    public ResponseEntity add(String bookMessage) {
+        HttpEntity<?> request = new HttpEntity<Object>(bookMessage);
+        ResponseEntity responseEntity = null;
+        try {
+            responseEntity = restTemplate.exchange(xmlParse.pathParse(""), HttpMethod.POST, request, String.class);
+        } catch (IOException | SAXException | ParserConfigurationException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        HttpStatus status = responseEntity.getStatusCode();
+        if (status.value() == 401) {
+            return new ResponseEntity("{\"msg\": \"username or password is error\"}", HttpStatus.UNAUTHORIZED);
+        } else if (status.value() == 409){
+            return new ResponseEntity("{\"msg\": \"error message\"}", HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity("{\"msg\": \"Create a new book\"}",HttpStatus.OK);
+        }
+    }
+
     public ResponseEntity edit(String isbn, String body) {
         HttpEntity<?> request = new HttpEntity<Object>(body);
         ResponseEntity responseEntity = null;

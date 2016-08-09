@@ -3,6 +3,7 @@ package com.thoughtworks.controller;
 import com.thoughtworks.model.XmlParse;
 import com.thoughtworks.services.BooksService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringArrayPropertyEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,12 @@ public class BooksController {
         return responseEntity;
     }
 
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity add(@RequestBody String body) throws IOException, SAXException, ParserConfigurationException {
+        ResponseEntity responseEntity = booksService.add(body);
+        return responseEntity;
+    }
+
     @RequestMapping(method = RequestMethod.PUT, value = "/{isbn}")
     public ResponseEntity edit(@PathVariable String isbn, @RequestBody String body) throws IOException, SAXException, ParserConfigurationException {
         ResponseEntity responseEntity = booksService.edit(isbn, body);
@@ -41,4 +48,5 @@ public class BooksController {
         ResponseEntity responseEntity = booksService.delete(isbnArray);
         return responseEntity;
     }
+
 }

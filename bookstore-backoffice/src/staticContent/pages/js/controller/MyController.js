@@ -1,4 +1,4 @@
-app.controller('MyCtrl', function ($scope, $http, getalldata) {
+app.controller('MyCtrl', function ($scope, $http,$cookieStore,getalldata) {
     $scope.showList = true;
     $scope.editCondition = '';
     $scope.selectedRows = [];
@@ -15,21 +15,10 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
         $scope.showList = true;
     };
 
-    $scope.openAddPage = function () {
-          window.location.href = "http://localhost:63342/code/bookstore-backoffice/src/staticContent/pages/addpage.html?_ijt=umb3pdnstojgpmk4ho57ibqslg";
-          $scope.allData.push(
-              {
-                  "name": "Rails之道",
-                  "isbn": "4727011",
-                  "author": "(美)Obie Fernandez",
-                  "price": 89,
-                  "img_url": "https://img3.doubanio.com/mpic/s4282672.jpg",
-                  "description": "《Rails之道》按照Rails的各个子系统进行组织编排……"
-              }
-          );
-           $scope.setPagingData($scope.allData, $scope.pagingOptions.currentPage, $scope.pagingOptions.pageSize);
 
-    }
+    $scope.openAddPage = function () {
+         window.location.href = "../pages/addpage.html";
+    };
 
 
 
@@ -150,6 +139,12 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
                      getalldata.async().then(function (d) {
                         $scope.allData = d;
                         $scope.setPagingData(d, page, pageSize);
+                        if($cookieStore.get("bookMsg")!=null){
+                           $scope.temp = $cookieStore.get("bookMsg");
+                           $cookieStore.remove("bookMsg");
+                           $scope.allData.push($scope.temp);
+                           $scope.setPagingData($scope.allData, $scope.pagingOptions.currentPage, $scope.pagingOptions.pageSize);
+                        };
                      });
                 }
                 else{
@@ -161,13 +156,13 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
 
     $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage);
 
-
     $scope.$watch('pagingOptions', function (newVal, oldVal) {
         if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
             $scope.firstVisitFlag = false;
             $scope.getPagedDataAsync($scope.pagingOptions.pageSize, $scope.pagingOptions.currentPage, $scope.filterOptions.filterText);
         }
     }, true);
+
 
 
 
@@ -209,13 +204,11 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
         }],
         multiSelect: false,
         enableCellSelection: false,
-
         enablePaging : true,
         showFooter: true,
         totalServerItems: 'totalServerItems',
         pagingOptions: $scope.pagingOptions,
         filterOptions: $scope.filterOptions,
-
         enableRowSelection: true,
         enableCellEditOnFocus: true,
         selectedItems: $scope.selectedRows,
@@ -226,5 +219,6 @@ app.controller('MyCtrl', function ($scope, $http, getalldata) {
         pagingOptions: $scope.pagingOptions,
         filterOptions: $scope.filterOptions
     };
+
 
 });
