@@ -60,7 +60,7 @@ app.controller('MyCtrl', function ($scope, $http,$cookieStore,getalldata) {
             //发送delete消息
             $http({
                 method: 'DELETE',
-                url: "http://localhost:8080/bookstore-backoffice/book",
+                url: "http://localhost:8080/bookstore-backoffice/book/"+$scope.isbnArray[0],
                 data: $scope.isbnJson,
             }).success(function (response) {
                 for (var k = 0;k< $scope.checkedRows.length;k++){
@@ -139,12 +139,6 @@ app.controller('MyCtrl', function ($scope, $http,$cookieStore,getalldata) {
                      getalldata.async().then(function (d) {
                         $scope.allData = d;
                         $scope.setPagingData(d, page, pageSize);
-                        if($cookieStore.get("bookMsg")!=null){
-                           $scope.temp = $cookieStore.get("bookMsg");
-                           $cookieStore.remove("bookMsg");
-                           $scope.allData.push($scope.temp);
-                           $scope.setPagingData($scope.allData, $scope.pagingOptions.currentPage, $scope.pagingOptions.pageSize);
-                        };
                      });
                 }
                 else{

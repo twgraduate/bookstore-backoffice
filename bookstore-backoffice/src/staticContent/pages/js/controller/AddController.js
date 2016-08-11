@@ -1,4 +1,4 @@
-var addpage = angular.module('addPage',['ngCookies']);
+var addpage = angular.module('addPage',[]);
 addpage.controller('AddForm',function($scope, $http,$cookieStore,$location){
     $scope.name = "";
     $scope.isbn = "";
@@ -24,13 +24,11 @@ addpage.controller('AddForm',function($scope, $http,$cookieStore,$location){
             data: $scope.result
         }).success(function (response) {
             if(response.msg == "Create a new book"){
-                $cookieStore.put("bookMsg",$scope.result);
                 alert(response.msg);
                 window.location.href = "../pages/index.html";
             }else{
-                alert("Add Fail");
+                alert(response.msg);
             }
-
         });
     }
 
