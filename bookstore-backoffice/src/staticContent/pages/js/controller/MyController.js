@@ -36,32 +36,34 @@ app.controller('MyCtrl', function ($scope, $http,$cookieStore,getalldata) {
                 $scope.myData.splice($scope.currentRow,1);
                 $scope.allData.splice(10 * ($scope.pagingOptions.currentPage-1) + $scope.currentRow,1);
                 $scope.setPagingData($scope.allData,$scope.pagingOptions.currentPage,$scope.pagingOptions.pageSize);
+                $scope.currentRow = -1;
             })
         }
         else {
             angular.copy($scope.originRows[0], $scope.myData[$scope.num]),
                 $scope.btnEdit = "edit",
-                $scope.btnDelete = "delete"
+                $scope.btnDelete = "delete",
+                $scope.num = -1
         }
     };
 
     $scope.editCurrentRow = function () {
-        if ($scope.btnEdit == "edit" && $scope.row < 10) {
-            $scope.num = $scope.row;
+        if ($scope.btnEdit == "edit" && $scope.currentRow != -1) {
+            $scope.num = $scope.currentRow;
             $scope.btnEdit = "save";
             $scope.btnDelete = "cancel";
-            $scope.gridOptions.selectRow($scope.num, true);
+            $scope.gridOptions.selectRow($scope.currentRow, true);
             angular.copy($scope.selectedRows, $scope.originRows);
         }
         else {
             //发送put消息
             $http({
                 method: 'PUT',
-                url: 'http://localhost:8080/bookstore-backoffice/book/' + $scope.selectedRows[0].isbn,
+                url: 'http://localhost:8080/bookstore-backoffice/book/' + $scope.originRows[0].isbn,
                 data: {
-                    'price': $scope.myData[$scope.num].price,
-                    'img_url': $scope.myData[$scope.num].img_url,
-                    'description': $scope.myData[$scope.num].description
+                    'price': $scope.myData[$scope.currentRow].price,
+                    'img_url': $scope.myData[$scope.currentRow].img_url,
+                    'description': $scope.myData[$scope.currentRow].description
                 }
             }).success(function (response) {
                 $scope.putReturn = response.data;
@@ -69,6 +71,7 @@ app.controller('MyCtrl', function ($scope, $http,$cookieStore,getalldata) {
 
             $scope.btnEdit = "edit";
             $scope.btnDelete = "delete";
+            $scope.num = -1;
         }
 
     };
@@ -138,14 +141,17 @@ app.controller('MyCtrl', function ($scope, $http,$cookieStore,getalldata) {
             field: 'name',
             displayName: 'Name',
             cellClass: 'grid-align',
+            enableCellEdit: false
         }, {
             field: 'isbn',
             displayName: 'ISBN',
-            cellClass: 'grid-align'
+            cellClass: 'grid-align',
+            enableCellEdit: false
         }, {
             field: 'author',
             displayName: 'Author',
-            cellClass: 'grid-align'
+            cellClass: 'grid-align',
+            enableCellEdit: false
         }, {
             field: 'price',
             displayName: 'Price',
