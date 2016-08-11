@@ -61,7 +61,7 @@ app.controller('MyCtrl', function ($scope, $http,$cookieStore,getalldata) {
             $http({
                 method: 'DELETE',
                 url: "http://localhost:8080/bookstore-backoffice/book",
-                data: $scope.isbnJson
+                data: $scope.isbnJson,
             }).success(function (response) {
                 for (var k = 0;k< $scope.checkedRows.length;k++){
                     $scope.myData.splice($scope.checkedRows[k],1);

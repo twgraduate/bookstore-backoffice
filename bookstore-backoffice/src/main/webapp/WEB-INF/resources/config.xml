@@ -2,8 +2,8 @@
 <url_config>
     <url>
         <id>1</id>
-        <!--<value>http://10.203.21.41:4000/books</value>-->
-        <value>http://localhost:8080/MockService/books</value>
+        <value>http://10.203.21.219:4000/books</value>
+        <!--<value>http://localhost:8080/MockService/books</value>-->
         <description>Mock the service of bookstore</description>
     </url>
 </url_config>

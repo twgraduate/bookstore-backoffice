@@ -1,5 +1,5 @@
 var addpage = angular.module('addPage',['ngCookies']);
-addpage.controller('AddForm',function($scope, $http,$cookieStore){
+addpage.controller('AddForm',function($scope, $http,$cookieStore,$location){
     $scope.name = "";
     $scope.isbn = "";
     $scope.author = "";
@@ -32,6 +32,10 @@ addpage.controller('AddForm',function($scope, $http,$cookieStore){
             }
 
         });
+    }
+
+    $scope.cancel = function(){
+       window.location.href = ("../pages/index.html");
     }
 });
 
