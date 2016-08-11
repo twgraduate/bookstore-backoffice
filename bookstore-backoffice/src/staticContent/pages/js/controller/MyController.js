@@ -5,12 +5,11 @@ app.controller('MyCtrl', function ($scope, $http,$cookieStore,getalldata) {
     $scope.originRows = [];
     $scope.checkedRows = [];
     $scope.editable = false;
-    $scope.currentRow = [];
+    $scope.currentRow = -1;
     $scope.btnEdit = "edit";
     $scope.btnDelete = "delete";
     $scope.allData = '';
     $scope.firstVisitFlag = true;
-
     $scope.showAll = function () {
         $scope.showList = true;
     };
@@ -23,50 +22,20 @@ app.controller('MyCtrl', function ($scope, $http,$cookieStore,getalldata) {
 
 
     $scope.returnCurrentRow = function (row) {
-        if ($scope.checkedRows.indexOf(row) >= 0) {
-            var pos = $scope.checkedRows.indexOf(row);
-            $scope.checkedRows.splice(pos, 1);
-        }
-        else {
-            $scope.editable = true;
-            $scope.checkedRows.push(row);
-        }
-        if ($scope.checkedRows.length != 1) {
-            $scope.row = 11;
-            $scope.btnEdit = "edit";
-            $scope.btnDelete = "delete";
-            $scope.editable = false;
-            $scope.editCurrentRow();
-        }
-        else {
-            $scope.editable = true;
-            $scope.row = $scope.checkedRows[0];
-        }
+        $scope.currentRow = row;
+        $scope.editable = true;
     };
 
     $scope.delCurrentRow = function () {
         if ($scope.btnDelete == "delete") {
-            $scope.isbnArray = [];
-            for (var k = 0; k < $scope.checkedRows.length; k++) {
-                $scope.isbnArray.push($scope.myData[$scope.checkedRows[k]].isbn);
-            }
-
-            $scope.isbnJson = '{';
-            for (var i in $scope.isbnArray) {
-                $scope.isbnJson = $scope.isbnJson + "'isbn" + i + "':'" + $scope.isbnArray[i] + "',";
-            }
-            $scope.isbnJson = $scope.isbnJson.substr(0, $scope.isbnJson.length - 1);
-            $scope.isbnJson += '}';
             //发送delete消息
             $http({
                 method: 'DELETE',
-                url: "http://localhost:8080/bookstore-backoffice/book/"+$scope.isbnArray[0],
-                data: $scope.isbnJson,
+                url: "http://localhost:8080/bookstore-backoffice/book/"+$scope.myData[$scope.currentRow].isbn,
             }).success(function (response) {
-                for (var k = 0;k< $scope.checkedRows.length;k++){
-                    $scope.myData.splice($scope.checkedRows[k],1);
-                    $scope.check.checked = false;
-                }
+                $scope.myData.splice($scope.currentRow,1);
+                $scope.allData.splice(10 * ($scope.pagingOptions.currentPage-1) + $scope.currentRow,1);
+                $scope.setPagingData($scope.allData,$scope.pagingOptions.currentPage,$scope.pagingOptions.pageSize);
             })
         }
         else {
@@ -193,7 +162,7 @@ app.controller('MyCtrl', function ($scope, $http,$cookieStore,getalldata) {
             field: 'options1',
             displayName: 'Check',
             cellClass: 'grid-align',
-            cellTemplate: '<input type="checkbox" ng-model="check" ng-click="returnCurrentRow(row.rowIndex)">',
+            cellTemplate: '<input type="radio" name="aaa" ng-model="check" ng-click="returnCurrentRow(row.rowIndex)" value="row.rowIndex">',
             enableCellEdit: false
         }],
         multiSelect: false,
