@@ -45,7 +45,6 @@ public class BooksService {
     public ResponseEntity getBooks() {
         HttpEntity<Object> request = new HttpEntity<>(createHeaders("admin", "tw666"));
         ResponseEntity<Object> responseEntity = null;
-
         try {
             responseEntity = restTemplate.exchange(xmlParse.pathParse(""), HttpMethod.GET, request, Object.class);
         } catch (IOException | SAXException | ParserConfigurationException e) {
@@ -53,9 +52,7 @@ public class BooksService {
         } catch (HttpClientErrorException e) {
             return new ResponseEntity("{\"msg\": \"username or password is error\"}", HttpStatus.UNAUTHORIZED);
         }
-
-        return new ResponseEntity(responseEntity.getBody(), HttpStatus.OK);
-
+        return new ResponseEntity(responseEntity.getBody(), responseEntity.getStatusCode());
     }
 
     public ResponseEntity add(Object bookMessage) {
@@ -73,7 +70,7 @@ public class BooksService {
         } catch (IOException | SAXException | ParserConfigurationException e) {
             return new ResponseEntity("{\"msg\": \"error message\"}", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(responseEntity.getBody(), HttpStatus.OK);
+        return new ResponseEntity(responseEntity.getBody(), responseEntity.getStatusCode());
     }
 
     public ResponseEntity edit(String isbn, Object body) {
@@ -90,7 +87,7 @@ public class BooksService {
         } catch (IOException | SAXException | ParserConfigurationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(responseEntity.getBody(), HttpStatus.OK);
+        return new ResponseEntity<>(responseEntity.getBody(), responseEntity.getStatusCode());
     }
 
     public ResponseEntity delete(String isbnArray) {
@@ -101,13 +98,13 @@ public class BooksService {
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode().value() == 401) {
                 return new ResponseEntity("{\"msg\": \"username or password is error\"}", HttpStatus.UNAUTHORIZED);
-            } else if (e.getStatusCode().value() == 404) {
-                return new ResponseEntity("{\"msg\": \"book is not found\"}", HttpStatus.UNAUTHORIZED);
+            } else if (e.getStatusCode().value() == 400) {
+                return new ResponseEntity("{\"msg\": \"book is not found\"}", HttpStatus.BAD_REQUEST);
             }
         } catch (IOException | SAXException | ParserConfigurationException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity(responseEntity.getBody(), HttpStatus.OK);
+        return new ResponseEntity(responseEntity.getBody(), responseEntity.getStatusCode());
     }
 
 

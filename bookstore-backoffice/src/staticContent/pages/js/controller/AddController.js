@@ -1,4 +1,4 @@
-var addpage = angular.module('addPage',[]);
+var addpage = angular.module('addPage',['ngCookies']);
 addpage.controller('AddForm',function($scope, $http,$cookieStore,$location){
     $scope.name = "";
     $scope.isbn = "";

@@ -53,11 +53,11 @@
         <input type="text" ng-model="name" id="inputName" class="form-control" placeholder="Name" required autofocus>
         <input type="text" ng-model="isbn" id="inputISBN" class="form-control" placeholder="ISBN" required>
         <input type="text" ng-model="author" id="inputAuthor" class="form-control" placeholder="Author" required>
-        <input type="number" ng-model="price" id="inputPrice" class="form-control" placeholder="Price" required>
+        <input type="number" onkeyup="value=value.replace(/[^\d.]/g,'')" ng-model="price" id="inputPrice" class="form-control" placeholder="Price" required>
         <input type="text" ng-model="imgurl" id="inputImgUrl" class="form-control" placeholder="ImgUrl" required>
-        <input type="text" ng-model="description" id="inputDescription" class="form-control" placeholder="Description" required>
-        <button class="btn btn-lg btn-primary btn-block" ng-click="addbook()">Add</button>
-        <button class="btn btn-lg btn-primary btn-block" ng-click="cancel()">Cancel</button>
+        <textarea style="width:400px;height:300px"  ng-model="description" id="inputDescription" class="form-control" placeholder="Description" required></textarea>
+        <button style="width:45%;float:left;margin:0" class="btn btn-lg btn-primary btn-block" ng-click="addbook()">Add</button>
+        <button style="width:45%;float:right;margin:0" class="btn btn-lg btn-primary btn-block" ng-click="cancel()">Cancel</button>
     </form>
 
 </div> <!-- /container -->
